@@ -13,8 +13,6 @@ if(arg == null) {
 
 var redisConf = config.get('Redis.dbConfig');
 
-console.log("REDIS_URL= ", redisConf);
-
 // Determine Configuration Settings for PROD or DEV
 // Load the correct REDIS Connection parameters
 if(redisConf.name == "PROD") {
@@ -33,7 +31,7 @@ client.on("error", function (err) {
 fs.readFile(arg, function (err, data) {
 	if (err) throw Error("File not Found. Check path name of the LUA script. Default path should be 'scripts/' ");
 		client.script('load', data.toString(), function(err, data) {
-			console.log('SHA= ', data);
+			console.log('SHA ==> ', data);
 			client.quit();
 		});
 });

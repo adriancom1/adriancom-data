@@ -325,11 +325,10 @@ function Repository() {
 		// Redis Config Server Params - DEV or PROD
 		var config = require('config');
 		var redisConf = config.get('Redis.dbConfig');
-		console.log('REDIS_URL== ', redisConf);
 		if(redisConf.name == "PROD") {
-			// var url = require('url'); 
-			// var redisURL = url.parse(process.env.REDIS_URL);
-			this._repository = repository.createClient(redisConf.port, redisConf.hostname);
+			var url = require('url'); 
+			var redisURL = url.parse(process.env.REDIS_URL);
+			this._repository = repository.createClient(redisURL.port, redisURL.hostname);
 			this._repository.auth(redisURL.auth.split(":")[1]);			
 		} else if (redisConf.name == "DEV") {
 			this._repository = repository.createClient(redisConf.port, redisConf.host);

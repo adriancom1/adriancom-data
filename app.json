@@ -1,7 +1,10 @@
 {
-  "name": "Node.js Getting Started",
-  "description": "A barebones Node.js app using Express 4",
-  "repository": "https://github.com/heroku/node-js-getting-started",
-  "logo": "http://node-js-sample.herokuapp.com/node.svg",
-  "keywords": ["node", "express", "static"]
+  "name": "Adrian Data Engine",
+  "description": "RESTful endpoint data provider using Redis as the data store.",
+  "keywords": [
+    "Redis",
+    "HTML5",
+    "REST"
+  ],
+  "website": "http://www.adrian-s.com",
 }

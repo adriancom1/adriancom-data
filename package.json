@@ -1,26 +1,33 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.1.4",
-  "description": "A sample Node.js app using Express 4",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
+  "name": "adriancom-data",
+  "version": "1.0.0",
+  "description": "A RESTful endpoint data provider",
+  "main": "adriancom.js",
+  "directories": {
+    "doc": "docs"
   },
-  "dependencies": {
-    "ejs": "^2.3.1",
-    "express": "~4.9.x"
+  "scripts": {
+    "start": "node adriancom.js",
+    "dev" : "nodemon adriancom.js localhost 8080",
+    "postinstall": "node scripts/luaload.js getProjectList.lua"
   },
   "engines": {
     "node": "0.12.2"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "git@heroku.com:adriancom-data.git"
   },
+  "author": "Adrian Sanoguel",
   "keywords": [
     "node",
     "heroku",
-    "express"
+    "redis"
   ],
-  "license": "MIT"
+  "dependencies": {
+    "redis": "^0.12.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.3.8"
+  }
 }

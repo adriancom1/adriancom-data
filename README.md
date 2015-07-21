@@ -1,36 +1,126 @@
-# node-js-getting-started
+REDIS - PORTFOLIO - ADRIAN-S.COM
 
-A barebones Node.js app using [Express 4](http://expressjs.com/).
+--------------------
+ANGULAR
+--------------------
 
-This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
+Angular Seed Project:
+See: https://github.com/angular/angular-seed
+git clone --depth=1 https://github.com/angular/angular-seed.git <your-project-name>
 
-## Running Locally
+Install it
+npm install
 
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku Toolbelt](https://toolbelt.heroku.com/) installed.
+Run the App
+npm start
 
-```sh
-$ git clone git@github.com:heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
-$ npm install
-$ npm start
-```
+Update Angular
+npm update
 
-Your app should now be running on [localhost:5000](http://localhost:5000/).
+Update Bower
+bower update
 
-## Deploying to Heroku
+--------------------
+HEROKU
+--------------------
+Public Dino: 
+http://adriancom-data.herokuapp.com
 
-```
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
+Git URL:
+git@heroku.com:adriancom-data.git
+https://git.heroku.com/adriancom-data.git
 
-## Documentation
+Redis External Connection URL:
+heroku redis:credentials
+------------------------------------------------
+redis://h:pc3ujvb8ko7kdq49fpda8l89g35@ec2-107-21-120-49.compute-1.amazonaws.com:11959
 
-For more information about using Node.js on Heroku, see these Dev Center articles:
+Add On Redis Docs:
+------------------------------------------------
+heroku addons:docs heroku-redis
 
-- [Getting Started with Node.js on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs)
-- [Heroku Node.js Support](https://devcenter.heroku.com/articles/nodejs-support)
-- [Node.js on Heroku](https://devcenter.heroku.com/categories/nodejs)
-- [Best Practices for Node.js Development](https://devcenter.heroku.com/articles/node-best-practices)
-- [Using WebSockets on Heroku with Node.js](https://devcenter.heroku.com/articles/node-websockets)
+
+Heroku Redis Toolkit:
+------------------------------------------------
+heroku plugins:install heroku-redis
+
+
+Remote CLI Connect to Redis:
+------------------------------------------------
+heroku redis:cli --confirm arcane-cove-5466
+
+
+Use Heroku toolbelt.
+heroku run bash - Exec linux commands
+heroku run node - Exec Node.Js
+heroku config - Set or see config vars
+
+DATA MODEL
+--------------------
+TABLES:
+--------------------
+ID (project id)
+id:projects (generates the SYSTEM ID)
+
+PROJECTS (List of Projects) LIST *** MAY NOT NEED
+index:projects (list of active phones to display) (not needed now, but for future)
+
+INDEX (lookup table by name and get the SYSTEM ID)
+index:projects:name -- USE AS the MASTER INDEX
+
+DETAILS (Full details per project)
+projects:[ID]:details
+projects:[ID]:summary (short details)
+
+------------------------------
+LUA Scripts:
+------------------------------
+getProjectList.lua
+createRecord.lua
+createDetails.lua
+
+-- SHA for Creating a Record (createRecord.lua)
+9405a753e95dfcb585a1db448df5427e0e4174e3
+Fields are:
+id, name, age, snippet
+
+Copy and Paste:
+evalsha 9405a753e95dfcb585a1db448df5427e0e4174e3 4 "dell-xp" "4" "Dell XP Phone" "This is the greatest phone on Pluto."
+
+-- SHA for Creating a Details record (createDetails.lua)
+evalsha 4cca2c1239f2630e73278a9d3e8ac93c7fae7add 4 "motorola-xoom" "Test of Additional Features great stuff" "Description in here" "Motorola Xoom 69"
+
+
+
+------------------------------
+CONFIG NODE JS FOR PROD / DEV
+------------------------------
+https://github.com/lorenwest/node-config
+
+Use the:
+npm config module
+
+$ npm install config
+$ mkdir config
+$ vi config/default.json
+
+{
+  // Customer module configs
+  "Customer": {
+    "dbConfig": {
+      "host": "localhost",
+      "port": 5984,
+      "dbName": "customers"
+    },
+    "credit": {
+      "initialLimit": 100,
+      // Set low for development
+      "initialDays": 1
+    }
+  }
+}
+
+
+
+
+

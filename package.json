@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "export NODE_ENV=prod && node adriancom.js",
+    "start": "node adriancom.js",
     "dev": "export NODE_ENV=dev && nodemon adriancom.js localhost 8080",
     "postinstall": "node scripts/luaload.js getProjectList.lua",
     "open-prod": "open http://adriancom-data.herokuapp.com",

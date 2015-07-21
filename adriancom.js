@@ -302,7 +302,7 @@ function Repository() {
 	};
 
 	function Node(id) {
-		Item.call(this, id);
+		Item.call(this, id); 
 	};
 	Node.prototype = Object.create(Item.prototype);
 	Node.prototype.constructor = Node;
@@ -319,13 +319,13 @@ function Repository() {
 			var delimiter = this.__delimiter;
 			return Mustache.render(delimiter+this.source, this);
 		}
-	};
+	}; 
 
 	function ClientSession(repository) {
 		// Redis Config Server Params - DEV or PROD
 		var config = require('config');
 		var redisConf = config.get('Redis.dbConfig');
-		console.log('REDIS_URL ', redisConf);
+		console.log('REDIS_URL== ', redisConf);
 		if(redisConf.name == "PROD") {
 			// var url = require('url'); 
 			// var redisURL = url.parse(process.env.REDIS_URL);

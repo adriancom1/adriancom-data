@@ -47,7 +47,7 @@ heroku plugins:install heroku-redis
 
 Remote CLI Connect to Redis:
 ------------------------------------------------
-heroku redis:cli --confirm arcane-cove-5466
+heroku redis:cli --confirm adriancom-data
 
 
 Use Heroku toolbelt.

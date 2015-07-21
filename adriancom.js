@@ -95,11 +95,11 @@ var _sysUtils = (function(){
 function ResourceWriter(output) {
 	var output = output || "Output";
 	var type = _sysUtils.getType(output);
-	console.log("RESOURCE OUTP---", type);
+	//console.log("RESOURCE OUTP---", type);
 	switch(type) {
 		case "String": //String will default to HTML
 			//output = output.values;//"<!DOCTYPE html>" + output.values + "</html>";
-			console.log("This is a String!!!!", output);
+			//console.log("This is a String!!!!", output);
 		break;
 		case "Object": //Plain JS Object
 			output = {"output" :  output};
@@ -114,7 +114,7 @@ function ResourceWriter(output) {
 			output = output.values.join("");
 		break;		
 	}
-	console.log("This is a Writer!!!!", typeof(output) );
+	//console.log("This is a Writer!!!!", typeof(output) );
 	this.output = output;
 };
 
@@ -141,7 +141,7 @@ function OutputWriter(output){
 };
 OutputWriter.prototype.constructor = OutputWriter;
 OutputWriter.prototype.write = function() {
-	console.log("THIS IS THE WRITE CALL METHOD====", typeof this.output)
+	//console.log("THIS IS THE WRITE CALL METHOD====", typeof this.output)
 	if(typeof this.output === 'object') {		
 		return JSON.stringify(this.output);	
 	} 
@@ -161,9 +161,9 @@ _sysUtils.copyProperty(_sysUtils, OutputWriter.prototype, "getParam");
 //JSONP Object writer
 function JSONPwriter(/* values, query */) {
 	var args = Array.prototype.slice.call(arguments, 0)[0];
-	console.log("JSONPwriter----", args.values)
+	//console.log("JSONPwriter----", args.values)
 	var cb = this.getParam(args.query, "callback"); //get the remote callback name
-	console.log("JSONPwriter==== Type---> ",typeof(args.values) )
+	//console.log("JSONPwriter==== Type---> ",typeof(args.values) )
 	//OutputWriter.call(this, cb+"("+JSON.stringify(args.values)+");");
 	OutputWriter.call(this, cb+"("+ args.values +");"); //Object
 };
@@ -541,7 +541,7 @@ ResourceMap.prototype = {
 		}
 		
 		repo.getNode(resourceName, resourceIndexField, fieldName, collection, resType);		
-		console.log("Get Resource========, ", resourceName, resourceIndexField, fieldName, collection);
+		//console.log("Get Resource========, ", resourceName, resourceIndexField, fieldName, collection);
 		return this;
 	},
 	getPathVariable : function(variable) {
@@ -567,7 +567,7 @@ ResourceMap.prototype = {
 	output : function(output) {
 		var self = this;
 		var rendition = (this.type) ? this.type : (function(value){
-			console.log("THIS IS THE ResourceMap Output MESSAGE======,", value);
+			//console.log("THIS IS THE ResourceMap Output MESSAGE======,", value);
 			//test value
 			//Todo: Fix this.
 			//return "html"; //Test this..mainly when the "root" / route is triggered
@@ -862,8 +862,8 @@ app.response = function(serverMode) {
 		var url = require('url').parse(request.url, true, false);
 		
 		
-		console.log("THE MAIN URL==", url);
-		console.log("THE MAIN URL PATH==", url.pathname);
+		//console.log("THE MAIN URL==", url);
+		//console.log("THE MAIN URL PATH==", url.pathname);
 
 		//Static Route Controller
 		var controller = url.pathname.substring(1);
@@ -874,7 +874,7 @@ app.response = function(serverMode) {
 		} else {
 			//load Root Page
 			if(controller === "") controller = "_root";
-			console.log("!!!!!No slash found=====", controller); //users/<users>
+			//console.log("!!!!!No slash found=====", controller); //users/<users>
 		}
 		//Instantiate the Routes object
 		var routeObject = app.routes.get(controller);
@@ -891,7 +891,7 @@ app.response = function(serverMode) {
 		var noError = (!new AssertUrl(url.path).validate()); //Check for properly formatted path name
 		noError = ~(~noError); //convert to an number for testing
 		// Todo: Need to get the routeObject.errors and routeObject.output properly classified
-		console.log("THIS IS THE ROUTE OBJECT ERROR MESSAGE======,", routeObject);
+		//console.log("THIS IS THE ROUTE OBJECT ERROR MESSAGE======,", routeObject);
 		if(noError > 0 ) {
 			routeObject.errors = true;
 			routeObject.output = "Assert URL failed to resolve the path name.";
@@ -964,7 +964,7 @@ var test = new app()
 .init("redis") //Load Modules (future can include other modules to init)
 //.basicMode() //Basic Mode - No Routing Enabled (Routing should be turned off)
 //.text("<h1>Hello World</h1>") // Custom Single page. Text or HTML
-.serverPort(3000)
+.serverPort(process.env.PORT)
 .root( //If Routing is enabled, this is the Root page
 	function(resource) {
 		var test = new HTMLwriter();

@@ -1030,7 +1030,7 @@ var test = new app()
 	// 			return test;
 	// 		}
 	// 	});
-	// },
+	// }, 
 	"phones/<phones>" : function(resource) {
 		//projects/sap/
 		//Todo - fix to select only if controller is accessed
@@ -1044,13 +1044,36 @@ var test = new app()
 				resource.getResource("phones", "name", "details");
 				resource.once("data", function(data) {
 					self.onComplete(data); 
-				});
+				});   
 			}
 		});
 	},
-	// "features/<features>" : function(resource) {
-	// 	return "<h1>Top 10 Items in here</h1><br><p> " + JSON.stringify(resource.getVars());
-	// },
+	//TODO: FIX= There is a wierd bug that breaks if the Route is less than 4 Characters
+	"welcome/<welcome>" : function(resource) {
+		var self = this;
+		return resource.render({
+			html: function() {
+				var html = new HTMLwriter();
+				html.title("Sample Welcome Test Page");
+				html.body("<h1>Sample Test Page Worked.</h1><p>" + JSON.stringify(resource.getVars()) + "<p>");
+				return html;
+			},
+
+			json: function() {
+				var test = new JSONwriter();
+					test.object();
+					test.keyValue("name", resource.getUrl());
+					test.nextItem().key("name2").value("This is the Sample Welcome Page JSON data representation.");
+					test.nextItem();
+					test.key("urlMapParameters");
+					test.value(resource.getVars());
+					test.nextKeyValue("customField1", "This will be a very powerful data service.");
+					test.nextKeyValue("customField2", 100);
+					test.endObject().build();
+				return test;
+			}
+		});
+	},
 	//"projects/<company>/projects/<projects>"
 	"phones" : function(resource) {
 		var self = this;

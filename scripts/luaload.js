@@ -12,7 +12,8 @@ if(arg == null) {
 }
 
 var redisConf = config.get('Redis.dbConfig');
- 
+
+console.log("REDIS_URL= ", redisConf);
 
 // Determine Configuration Settings for PROD or DEV
 // Load the correct REDIS Connection parameters

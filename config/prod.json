@@ -1,9 +1,0 @@
-{
-  "Redis": {
-    "dbConfig": {
-    	"name": "PROD",
-    	"port": "11959",
-      	"host": "h:pc3ujvb8ko7kdq49fpda8l89g35@ec2-107-21-120-49.compute-1.amazonaws.com"
-    }
-  }
-}

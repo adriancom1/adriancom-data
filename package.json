@@ -9,7 +9,9 @@
   "scripts": {
     "start": "node adriancom.js",
     "dev": "export PORT=3000 && export NODE_ENV=dev && nodemon adriancom.js localhost 8080",
-    "install": "export NODE_ENV=production && node scripts/luaload.js getProjectList.lua",
+    "install": "node scripts/luaload.js getProjectList.lua",
+    "preinstall": "node scripts/luaload.js createDetails.lua",
+    "postinstall": "node scripts/luaload.js createRecord.lua",
     "open-prod": "open http://adriancom-data.herokuapp.com",
     "open-dev": "open http://localhost:3000"
   },

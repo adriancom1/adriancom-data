@@ -3,6 +3,8 @@ var http = require('http');
 var fs = require('fs');
 var Mustache = require('mustache');
 var EventEmitter = require('events').EventEmitter;
+var config = require('config');
+
 
 //root : __dirname + "/views",
 ///Sys Utils - make a module
@@ -536,12 +538,13 @@ ResourceMap.prototype = {
 			resType = "sha";
 			fieldName = collection[0];
 			collection = collection[1]
-		} else {
-			fieldName = this.getPathVariable(resourceName);	
+		} else { 
+			fieldName = this.getPathVariable(resourceName);
 		}
 		
+		//console.log("Get Resource========, resourceName== ", resourceName,' resourceIndexField== ', resourceIndexField, 'fieldName= ',fieldName, collection);
 		repo.getNode(resourceName, resourceIndexField, fieldName, collection, resType);		
-		//console.log("Get Resource========, ", resourceName, resourceIndexField, fieldName, collection);
+		
 		return this;
 	},
 	getPathVariable : function(variable) {
@@ -1031,7 +1034,7 @@ var test = new app()
 	// 		}
 	// 	});
 	// }, 
-	"phones/<phones>" : function(resource) {
+	"projects/<projects>" : function(resource) {
 		//projects/sap/
 		//Todo - fix to select only if controller is accessed
 	//example: resource.getResource("users", "name", "details");
@@ -1041,7 +1044,7 @@ var test = new app()
 		var self = this;
 		return resource.render({
 			json: function() {
-				resource.getResource("phones", "name", "details");
+				resource.getResource("projects", "name", "details");
 				resource.once("data", function(data) {
 					self.onComplete(data); 
 				});   
@@ -1075,11 +1078,12 @@ var test = new app()
 		});
 	},
 	//"projects/<company>/projects/<projects>"
-	"phones" : function(resource) {
+	"projects" : function(resource) {
 		var self = this;
+		var script = config.get('Redis.scripts.list.sha');		
 		return resource.render({
 			json: function() {
-				resource.getResource("9a9b449e07629f7483a79cd0fc935a7dd55e8ce9", 2, ['phones', 'summary']);
+				resource.getResource(script, 2, ['phones', 'summary']);
 				resource.once("data", function(data) {
 					//Wrapping in a JSONWriter is optional
 					var js = new JSONwriter();

@@ -1,4 +1,5 @@
-// This will convert a LUA Script into a cached Redis SHA script
+// This will compile a LUA Script into a cached Redis script
+// An SHA value representing the compiled script will be returned
 
 
 var fs = require('fs');
@@ -6,6 +7,7 @@ var redis = require('redis');
 var config = require('config');
 var client = null;
 
+//@Param = Lua Script file name
 var arg = 'scripts/' + process.argv[2];
 if(arg == null) {
 	throw new Error('File name paramater is missing');
@@ -30,6 +32,7 @@ client.on("error", function (err) {
 
 fs.readFile(arg, function (err, data) {
 	if (err) throw Error("File not Found. Check path name of the LUA script. Default path should be 'scripts/' ");
+		
 		client.script('load', data.toString(), function(err, data) {
 			console.log('SHA ==> ', data);
 			client.quit();

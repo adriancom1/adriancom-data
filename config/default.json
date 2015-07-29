@@ -1,20 +1,28 @@
 {
   "Redis": {
+    "cli": {
+      "dir": "/Users/adrian/redis/src",
+      "bin": "redis-cli"
+    },
+    "content": {
+        "dir": "/Users/adrian/git/adriancom/adriancom-data/content",
+        "source": "projects.json"
+      },
     "scripts": {
       "directory" : "scripts",
       "create": {
         "details" : {
           "name" : "createDetails.lua",
-          "sha" : "988bb576c2cf72654bb0c0ac6091728bbc7017ea"
+          "sha" : "f5529f643ac5c40c597fc17abbc461950b2ee2c3"
         },
-        "record" : {
+        "summary" : {
           "name": "createRecord.lua",
-          "sha": "4631493991cbc3ea998a2096db306a31362b0863"
+          "sha": "c82209d573eacb0a41e6d0332189870f9f6b11be"
         }
       },
       "list" : {
           "name": "getProjectList.lua",
-          "sha": "9a9b449e07629f7483a79cd0fc935a7dd55e8ce9"
+          "sha": "4520912071172b9b8e1ec8fbdd686af20a9f3bc1"
       }
     }
   }

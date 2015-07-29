@@ -1,16 +1,17 @@
 -- Create Details 
 
-local args = {KEYS[1],KEYS[2],KEYS[3],KEYS[4]}
-local collection = 'projects' --Future allow parameters from ARGV 
+local args = {KEYS[1],KEYS[2],KEYS[3],KEYS[4], KEYS[5],KEYS[6],KEYS[7],KEYS[8],KEYS[9],KEYS[10]}
+--local args = {'projects','adrian-test', 'Adrian Test Page', 'This is only a test', 'Headline here', '2015', 'Web', 'Flash', 'Do Good', 'Adrian Sanoguel'} -- Debug
+local collection = args[1]
 local tableName = 'details'
 
-
-local systemId = function (fieldName)
-	return redis.call('hget' , 'index:'..collection..':name', fieldName)
+-- Id is passed in as a constructor parameter
+local systemId = function (id)
+	return redis.call('hget' , 'index:'..collection..':name', id)
 end
 
-local Record = {status=nil, id=nil, out = function(self)
-		return cjson.encode(self.status)
+local Record = {status=nil, SYS_ID=nil, out = function(self)
+		return cjson.encode({["status"] = 'true'})
 	end
 }
 
@@ -22,7 +23,7 @@ function Record:new(o)
 end
 
 function Record:fail() 
-	return cjson.encode({['status'] = 'Failed'})
+	return cjson.encode({['status'] = 'false'})
 end
 
 function Record:getStatus() 
@@ -30,24 +31,23 @@ function Record:getStatus()
 end
 
 function Record:setValues()
-	local id = self.id
+	local id = self.SYS_ID
 	self.status = redis.call('hmset', collection..':'..tostring(id)..':'..tableName, 
-		'id', 	id,
-		'additionalFeatures', args[2],
-		'description', args[3],
-		'name', args[4]) 
-	-- UNCOMMENT TO DEBUG
-		-- 'id', 	id,
-		-- 'additionalFeatures', 'These are the additional features',
-		-- 'description', 'A description will be in here',
-		-- 'name', 'This is the actual name')
+		'id', 			args[2],			-- Numeric Id of the record (ex. adrian-test)
+		'name', 		args[3],	-- Project name or title
+		'description', 	args[4],	-- Summary of the project
+		'headline', 	args[5],	-- Short headline, slug
+		'year', 		args[6],	-- Year completed
+		'platform1',	args[7],	-- Platorm (Web, Mobile)
+		'platform2',	args[8],	-- Secondary Platform (CMS, Flash, Drupal)
+		'randomQuote', 	args[9],	-- Random design quote
+		'quoteAuthor', 	args[10])	-- Quote author
 end
 
 
-
 -- Main --
-local rec = Record:new{id=systemId(args[1])}
---local rec = Record:new{id=systemId('adrian-test')} -- DEBUG
+local rec = Record:new{SYS_ID=systemId(args[2])}
+
 rec:setValues()
 local status = rec:getStatus()
 

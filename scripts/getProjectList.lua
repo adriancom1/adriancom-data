@@ -1,6 +1,7 @@
 -- Get Project List
 -- Accepts external parameters KEYS[1] = Collection Name, KEYS[2] = Table
-
+local args = {KEYS[1], KEYS[2]}
+--local args = {'projects', 'summary'} -- Debug
 local Project = {values = {}, index = nil, out = function(self)
 		return cjson.encode(self.values)
 	end
@@ -42,7 +43,7 @@ function Project:getValues()
 	for i=1, self:len() do
 		-- Get all Fields and Values from the REDIS Key
 		local id = tostring(index[i])
-		summary = {next=summary, value = redis.call('hgetall', KEYS[1]..':'..id..':'..KEYS[2])}
+		summary = {next=summary, value = redis.call('hgetall', args[1]..':'..id..':'..args[2])}
 	end
 	
 	-- Iterate and separate the values returned from the 'HGETALL' array 
@@ -68,7 +69,7 @@ function Project:getValues()
 	self.values = arr
 end
 
-local project = Project:new{index = redis.call('hgetall', 'index:'..KEYS[1]..':name')}
+local project = Project:new{index = redis.call('hgetall', 'index:'..args[1]..':name')}
 project:getValues()
 return project:out()
 

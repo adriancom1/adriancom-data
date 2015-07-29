@@ -1,4 +1,6 @@
 *.log
+*.rdb
 node_modules
-.env
+*.env
 .gitignore
+projects.json

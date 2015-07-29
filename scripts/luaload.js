@@ -17,14 +17,14 @@ var redisConf = config.get('Redis.dbConfig');
 
 // Determine Configuration Settings for PROD or DEV
 // Load the correct REDIS Connection parameters
-if(redisConf.name == "PROD") {
+if(~redisConf.name.indexOf('prod') !== 0) {
 	var url = require('url'); 
 	var redisURL = url.parse(process.env.REDIS_URL);
 	client = redis.createClient(redisURL.port, redisURL.hostname);
 	client.auth(redisURL.auth.split(":")[1]);			
-} else if (redisConf.name == "DEV") {
+} else if (redisConf.name == "dev") {
 	client = redis.createClient(redisConf.port, redisConf.host);
-}
+} 
 
 client.on("error", function (err) {
     console.log("Error " + err);

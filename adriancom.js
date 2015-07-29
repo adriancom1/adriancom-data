@@ -327,12 +327,12 @@ function Repository() {
 		// Redis Config Server Params - DEV or PROD
 		var config = require('config');
 		var redisConf = config.get('Redis.dbConfig');
-		if(redisConf.name == "PROD") {
+		if(~redisConf.name.indexOf('prod') != 0) {
 			var url = require('url'); 
 			var redisURL = url.parse(process.env.REDIS_URL);
 			this._repository = repository.createClient(redisURL.port, redisURL.hostname);
 			this._repository.auth(redisURL.auth.split(":")[1]);			
-		} else if (redisConf.name == "DEV") {
+		} else if (redisConf.name == "dev") {
 			this._repository = repository.createClient(redisConf.port, redisConf.host);
 		}
 		EventEmitter.call(this);
@@ -1033,7 +1033,7 @@ var test = new app()
 	// 			return test;
 	// 		}
 	// 	});
-	// }, 
+	// },  
 	"projects/<projects>" : function(resource) {
 		//projects/sap/
 		//Todo - fix to select only if controller is accessed
@@ -1083,7 +1083,7 @@ var test = new app()
 		var script = config.get('Redis.scripts.list.sha');		
 		return resource.render({
 			json: function() {
-				resource.getResource(script, 2, ['phones', 'summary']);
+				resource.getResource(script, 2, ['projects', 'summary']);
 				resource.once("data", function(data) {
 					//Wrapping in a JSONWriter is optional
 					var js = new JSONwriter();

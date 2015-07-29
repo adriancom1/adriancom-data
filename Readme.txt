@@ -85,7 +85,7 @@ Fields are:
 id, name, age, snippet
 
 Copy and Paste: (createRecord.lua)
-evalsha 9405a753e95dfcb585a1db448df5427e0e4174e3 4 "dell-xp" "4" "Dell XP Phone" "This is the greatest phone on Pluto."
+evalsha 9405a753e95dfcb585a1db448df5427e0e4174e3 4 "adrian-test" "2" "Dell XP Phone" "This is the greatest phone on Pluto."
 
 -- SHA for Creating a Details record (createDetails.lua)
 evalsha 4cca2c1239f2630e73278a9d3e8ac93c7fae7add 4 "motorola-xoom" "Test of Additional Features great stuff" "Description in here" "Motorola Xoom 69"
@@ -136,6 +136,11 @@ aws s3 sync . s3://adriancom --exclude ".DS_*" (copies root folders also)
 S3 CLI Docs
 http://docs.aws.amazon.com/cli/latest/reference/s3/sync.html
 
+GZIP
+Must have propoer metadata set on S3:
+Content-Type: (automatic) binary/octet
+Content-Encoding: gzip (manually add this)
+
 ------------------------------
 GRUNT config for Adriancom-UI
 ------------------------------
@@ -182,7 +187,7 @@ And Done!
 
 *also can take advantage of Bower hooks such as "postinstall:"
 
-Wiredep 
+Wiredep s
 Options:
   -h, --help          # Print usage information
   -v, --version       # Print the version
@@ -196,5 +201,26 @@ Options:
   --includeSelf       # Include top-level bower.json `main` files
   --verbose           # Print the results of `wiredep`
 
+
+------------------------------
+Content
+------------------------------
+JSON data schema
+createRecord.lua (Summary)
+[{
+
+  "id":   "",  
+  "name": "",
+  "title": "",
+  "company": "",
+  "headline": "",
+  "year": "",
+  "platform1": "",
+  "platform2": "",
+  "randomQuote": "",
+  "quoteAuthor": ""
+
+
+}]
 
 

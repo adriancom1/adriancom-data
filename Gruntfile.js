@@ -1,49 +1,91 @@
 require('shelljs/global');
 var fs = require('fs');
 var color = require('bash-color');
-var load = require('./scripts/redis-load.js');
-//load.setSource('scripts');
+var EventEmitter = require('events').EventEmitter;
+var emitter = new EventEmitter();
 
-//Dependencies:
-hasBin('git', 'http://git-scm.com/downloads');
-hasBin('divshot', 'npm install -g divshot');
-hasBin('aws', 'pip install awscli');
-
+//Clear the console
 exec('clear');
 
 module.exports = function(grunt) {
 
 	grunt.initConfig({
 		// Multi Tasks Configuration
-		config: grunt.file.readJSON('config/config.json'),
-	   	load: {
-	   		all: {
-	   			test: 'shit',
-	   			//lua.scripts
-	   			//loadlua.js (arg)
-	   		},
-	   		script: {
-
+		config: grunt.file.readJSON('config/default.json'),
+		load: {
+	   		data: {
+	   			cli : "<%=config.Redis.cli%>", 
+	   			summary : "<%=config.Redis.scripts.create.summary.sha%>",
+	   			details : "<%=config.Redis.scripts.create.details.sha%>",
+	   			content: "<%=config.Redis.content%>"
 	   		}
 	   	}
 	});
 
 	// Define Multi Tasks
-	grunt.registerMultiTask('load', 'Load LUA scripts into the Redis cache. ', function() {
-//		var target = this.target;
-		
-		console.log('wtf====', load);
-		
+	grunt.registerMultiTask('load', 'Load data into the Redis datastore. ', function(dataset) {
+		var self = this;
+		//Default workspace is projects
+		if(dataset == null) throw new Error('dataset or Key name parameter is missing. Use: grunt:load:[script]:[dataset], (ex. grunt load:record:projects)');
+		banner.call(this, grunt);
+		//Script Id
+		var data = this.data;
+		var cli = data.cli;
+		var content = data.content;
+		var sha = null;
+		//Change to new working directory
+		cd(cli.dir);
+		if(~pwd().indexOf(cli.dir) == 0) throw new Error('Redis cli was not found. Check the cli path name in config.json.');
+
+		var done = this.async();
+		//Request the content package and push to the Redis datastore.
+		getContent(content.dir + '/' + content.source);
+		//On data ready, initiate a server script call to Redis
+		emitter.on('ready', function(data) {
+			data.forEach(function(item) {
+				var fieldLen = 1; //Set to 1 to account for the 'collection' name (dataset)
+				var fieldValues =  ' "' + dataset + '"';
+				var fields = Object.keys(item); //summary, details
+				
+				for(var i=0; i < fields.length; i++) {
+					//Get the SHA key id from the config data
+					sha = self.data[fields[i]];
+					var collection = item[fields[i]];
+					for(var field in collection) {
+						fieldValues += ' "' + collection[field] + '"';
+						fieldLen++;
+					}
+				//Commit data to the Redis datastore
+				run('./'+ cli.bin + ' evalsha '+ sha + ' ' + fieldLen + fieldValues,
+				"An internal error occured. Data was not received.", "Records were successfully added.", './'+ cli.bin +' get id:' + dataset);
+				//Reset the counter and fields for the next recordset
+				fieldLen = 1;
+				fieldValues =  ' "' + dataset + '"';
+				}
+			});
+		});
 	});	
 
 // END
 };
 
 
-
+function getContent(source) {
+	var self = this;
+	fs.readFile(source, function (err, data) {
+	if (err) throw Error("File not Found. Check path name of the LUA script. Default path should be 'scripts/' ");
+		emitter.emit('ready', JSON.parse(data.toString()));
+	});
+}
 
 // Additional Script Utils
 function run(command, errorMessage, successMessage, onCompleteCommand) {
+	var error = function(message) {
+		echo(color.red('==========================================================', true));
+		echo('[ERROR] :: ' + message);
+		echo(color.red('==========================================================', true));
+	};
+
 	var command = exec(command);
 	if (command.code !== 0) {
 		// Only IF Git:
@@ -52,11 +94,16 @@ function run(command, errorMessage, successMessage, onCompleteCommand) {
 			exec(onCompleteCommand);
 			return;
 		}		
-		echo(color.red('=========================================================='), true );
-		echo('[ERROR] :: ' + errorMessage);
-		echo(color.red('=========================================================='), true );
+		error(errorMessage);
 		exit(1);
 	} else {
+		if(command.output) {
+			var output = JSON.parse(command.output).status;
+			if(!output) {
+				error(errorMessage);
+				exit(1);
+			}
+		}
 		ok.call(echo, successMessage);
 		if(onCompleteCommand) {
 			exec(onCompleteCommand);

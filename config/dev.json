@@ -1,7 +1,7 @@
 {
   "Redis": {
     "dbConfig": {
-    	"name": "DEV",
+    	"name": "dev",
     	"port": "6379",
       	"host": "127.0.0.1"
     }

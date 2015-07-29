@@ -1,7 +1,7 @@
 {
   "Redis": {
     "dbConfig": {
-    	"name": "prod"
+    	"name": "local-prod"
     }
   }
 }

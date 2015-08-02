@@ -3,4 +3,5 @@
 node_modules
 *.env
 .gitignore
+Readme.txt
 projects.json

@@ -224,3 +224,12 @@ createRecord.lua (Summary)
 }]
 
 
+
+------------------------------
+Main Source Scripts
+------------------------------
+<script type="text/javascript" src="js/dom-utils.js"></script>
+<script type="text/javascript" src="js/scroll-utils.js"></script>
+<script type="text/javascript" src="js/gridanim.js"></script>
+<script type="text/javascript" src="js/scenes.js"></script>
+<script type="text/javascript" src="js/app.js"></script>

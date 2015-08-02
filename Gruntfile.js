@@ -26,7 +26,7 @@ module.exports = function(grunt) {
 	grunt.registerMultiTask('load', 'Load data into the Redis datastore. ', function(dataset) {
 		var self = this;
 		//Default workspace is projects
-		if(dataset == null) throw new Error('dataset or Key name parameter is missing. Use: grunt:load:[script]:[dataset], (ex. grunt load:record:projects)');
+		if(dataset == null) throw new Error('dataset or Key name parameter is missing. Use: grunt:load:[script]:[dataset], (ex. grunt load:data:projects)');
 		banner.call(this, grunt);
 		//Script Id
 		var data = this.data;

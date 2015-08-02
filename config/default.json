@@ -7,7 +7,7 @@
     "content": {
         "dir": "/Users/adrian/git/adriancom/adriancom-data/content",
         "source": "projects.json"
-      },
+    },
     "scripts": {
       "directory" : "scripts",
       "create": {
@@ -23,6 +23,10 @@
       "list" : {
           "name": "getProjectList.lua",
           "sha": "4520912071172b9b8e1ec8fbdd686af20a9f3bc1"
+      },
+      "delete": {
+          "name": "deleteRecord.lua",
+          "sha":  "f9b0f22b50929858f9d16b4fe0375f57488b2e33"
       }
     }
   }

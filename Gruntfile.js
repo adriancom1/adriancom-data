@@ -64,7 +64,32 @@ module.exports = function(grunt) {
 				}
 			});
 		});
-	});	
+	});
+
+	grunt.registerTask('delete', 'Delete a single record by Id from the Redis datastore. ', function() {
+		var self = this;
+		var argsLen = arguments.length;
+		if(argsLen !== 2) throw new Error('RecordId or Key name parameter is missing. Use: grunt delete:[dataset]:[recordId], (ex. grunt delete:projects:adrian-test)');
+		var collection = arguments[0];
+		var recordId = self.target = arguments[1];
+		banner.call(self, grunt);
+		// Read the config settings
+		var config =  grunt.file.readJSON('config/default.json');
+		//Set the Root config record
+		config = config.Redis;
+
+		var cli = config.cli;
+		var sha = config.scripts['delete'].sha;
+		
+		//Change to the directory containing the Redis Cli bin program
+		cd(cli.dir);
+		if(~pwd().indexOf(cli.dir) == 0) throw new Error('Redis cli was not found. Check the cli path name in config.json.');
+
+		//Delete the record to the Redis datastore
+		var command = './'+ cli.bin + ' evalsha '+ sha + ' ' + argsLen + ' "' + collection + '" "' + recordId + '"';
+		run(command, "An internal error occured. Data was not deleted.", "Records were successfully deleted.");
+				
+	});
 
 // END
 };
@@ -121,7 +146,7 @@ function banner(grunt, arg) {
 //Success Message
 function ok(msg) {
 	this(color.green('==========================================================', true));
-	this(color.yellow('---> \n[SUCCESSFUL] :: ' + msg, true));
+	this(color.yellow('\n---> [SUCCESSFUL] :: ' + msg, true));
 	this(color.green('==========================================================', true));
 };
 

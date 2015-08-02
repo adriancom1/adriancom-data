@@ -11,7 +11,7 @@
     "dev": "export PORT=3000 && export NODE_ENV=dev && nodemon adriancom.js localhost 8080",
     "install": "node scripts/luaload.js getProjectList.lua",
     "preinstall": "node scripts/luaload.js createDetails.lua",
-    "postinstall": "node scripts/luaload.js createRecord.lua",
+    "postinstall": "node scripts/luaload.js createRecord.lua && node scripts/luaload.js deleteRecord.lua",
     "local-prod": "export PORT=3000 && export NODE_ENV=local-prod && export REDIS_URL=redis://h:pc3ujvb8ko7kdq49fpda8l89g35@ec2-107-21-120-49.compute-1.amazonaws.com:11959 && nodemon adriancom.js localhost 8080",
     "open-prod": "open http://adriancom-data.herokuapp.com",
     "open-dev": "open http://localhost:3000"

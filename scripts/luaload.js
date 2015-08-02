@@ -1,11 +1,13 @@
 // This will compile a LUA Script into a cached Redis script
 // An SHA value representing the compiled script will be returned
 
-
+require('shelljs/global');
 var fs = require('fs');
 var redis = require('redis');
 var config = require('config');
+var color = require('bash-color');
 var client = null;
+
 
 //@Param = Lua Script file name
 var arg = 'scripts/' + process.argv[2];
@@ -34,13 +36,18 @@ fs.readFile(arg, function (err, data) {
 	if (err) throw Error("File not Found. Check path name of the LUA script. Default path should be 'scripts/' ");
 		
 		client.script('load', data.toString(), function(err, data) {
-			console.log('SHA ==> ', data);
+			ok(data + ' : ' + process.argv[2]);
 			client.quit();
 		});
 });
 
 
-
+//Success Message
+function ok(msg) {
+	echo(color.green('==========================================================', true));
+	echo(color.yellow('\n[SHA] ==> ' + msg, true));
+	echo(color.green('==========================================================', true));
+};
 
 
 		

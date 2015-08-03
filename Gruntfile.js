@@ -37,7 +37,7 @@ module.exports = function(grunt) {
 		cd(cli.dir);
 		if(~pwd().indexOf(cli.dir) == 0) throw new Error('Redis cli was not found. Check the cli path name in config.json.');
 
-		var done = this.async();
+		var done = this.async(); 
 		//Request the content package and push to the Redis datastore.
 		getContent(content.dir + '/' + content.source);
 		//On data ready, initiate a server script call to Redis
@@ -66,11 +66,11 @@ module.exports = function(grunt) {
 					}
 				//Commit data to the Redis datastore
 				var command = './'+ cli.bin + ' evalsha '+ sha + ' ' + fieldLen + fieldNames + ' ' + fieldValues;
-				console.log('\n\n\nWTF===', command);
-				// run('./'+ cli.bin + ' evalsha '+ sha + ' ' + fieldLen + fieldValues,
-				// "An internal error occured. Data was not received.", collection.id + ' ' + fields[i] + " added.", './'+ cli.bin +' get id:' + dataset);
+				run(command, "An internal error occured. Data was not received.", collection.id + ' ' + fields[i] + " added.", './'+ cli.bin +' get id:' + dataset);
+				
 				//Reset the counter and fields for the next recordset
 				fieldLen = 1;
+				var fieldNames = ' "collection"';
 				fieldValues =  ' "' + dataset + '"';
 				}
 			});

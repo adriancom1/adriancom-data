@@ -13,7 +13,7 @@
       "create": {
         "details" : {
           "name" : "createDetails.lua",
-          "sha" : "f5529f643ac5c40c597fc17abbc461950b2ee2c3"
+          "sha" : "6ffd7d1d9a0b7a2d04c75565b7d47a983facfbf2"
         },
         "summary" : {
           "name": "createRecord.lua",

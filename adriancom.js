@@ -1010,18 +1010,21 @@ var test = new app()
 			json: function() {
 				resource.getResource("projects", "name", "details");
 				resource.once("data", function(data) {
-
-					//Iterate through the list of field names
-					Object.keys(data).forEach(function(key) {
-						var value = data[key];
-						//LUA Redis Hash Hack convert to Javascript JSON type
-						if(value.substr(0,1) == "{" || value.substr(0,1) == "[") {
-							value = value.replace(/\\/g, "");
-							data[key] = JSON.parse(value);
-						}
-					});
-
-					self.onComplete(data); 
+					//Test if recordId exists
+					if (data.id == null) {
+						data.id = "Record not found.";
+					} else {
+						//Iterate through the list of field names
+						Object.keys(data).forEach(function(key) {
+							var value = data[key];
+							//LUA Redis Hash Hack convert to Javascript JSON type
+							if(value.substr(0,1) == "{" || value.substr(0,1) == "[") {
+								value = value.replace(/\\/g, "");
+								data[key] = JSON.parse(value);
+							}
+						});
+					}
+					self.onComplete(data);
 				});   
 			}
 		});

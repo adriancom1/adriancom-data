@@ -944,20 +944,10 @@ app.run = function(applicationObject) {
 	var ware = applicationObject;
 	//Mainly used for initial bootstrap or when routes are not configured
 	if(ware.serverBasicMode) return app.response(true); 
-	
-	//re check this - May not need
-	// var values = {};
-	// Object.keys(ware).forEach(function(item){
-	// 	app.values.push(
-	// 		Object.defineProperty(values, item, {value: ware[item], writable : false, configurable : false})
-	// 	);
-	// });
 
 	//construct a new object, then send it
 	return app.response();
 }
-
-// var app = require('something');
 
  //// END APP 
 
@@ -1008,32 +998,6 @@ var test = new app()
 		});
 	},
 
-	// "movies/<movies>/@staff(actors|directors|musicians)/<actors>" : function(resource) {
-	// 	//this.config({method : POST});
-
-	// 	return resource.render({
-	// 		html: function(){
-	// 			var test = new HTMLwriter();
-	// 				test.title("This is the title");
-	// 				test.body("<h1>Movies Page</h1>");
-	// 				return test;
-	// 			},
-
-	// 		json: function() {
-	// 			var test = new JSONwriter();
-	// 				test.object();
-	// 				test.keyValue("name", resource.getUrl());
-	// 				test.nextItem().key("name2").value("this is interesting");
-	// 				test.nextItem();
-	// 				test.key("urlmap");
-	// 				test.value(resource.getVars());
-	// 				test.nextKeyValue("coolkey", "this is flippin sweet");
-	// 				test.nextKeyValue("coolkey2", 100);
-	// 				test.endObject().build();
-	// 			return test;
-	// 		}
-	// 	});
-	// },  
 	"projects/<projects>" : function(resource) {
 		//projects/sap/
 		//Todo - fix to select only if controller is accessed
@@ -1046,6 +1010,17 @@ var test = new app()
 			json: function() {
 				resource.getResource("projects", "name", "details");
 				resource.once("data", function(data) {
+
+					//Iterate through the list of field names
+					Object.keys(data).forEach(function(key) {
+						var value = data[key];
+						//LUA Redis Hash Hack convert to Javascript JSON type
+						if(value.substr(0,1) == "{" || value.substr(0,1) == "[") {
+							value = value.replace(/\\/g, "");
+							data[key] = JSON.parse(value);
+						}
+					});
+
 					self.onComplete(data); 
 				});   
 			}
@@ -1077,7 +1052,7 @@ var test = new app()
 			}
 		});
 	},
-	//"projects/<company>/projects/<projects>"
+	//Summary - Create Record
 	"projects" : function(resource) {
 		var self = this;
 		var script = config.get('Redis.scripts.list.sha');		
@@ -1088,8 +1063,22 @@ var test = new app()
 					//Wrapping in a JSONWriter is optional
 					var js = new JSONwriter();
 					js.array();
-					var _data = js.parse(data);
+					var _data = js.parse(data); //This parses a LUA Table that consists of a list of Hash tables
 					for(var item in _data) {
+						var hashTable = null;
+						//Check for Object and parse as necessary
+						if (typeof _data[item] == 'object') {
+							hashTable = _data[item];
+							//Iterate through the list of field names
+							Object.keys(hashTable).forEach(function(key) {
+								var value = _data[item][key];
+								//LUA Redis Hash Hack convert to Javascript JSON type
+								if(value.substr(0,1) == "{" || value.substr(0,1) == "[") {
+									value = value.replace(/\\/g, "");
+									_data[item][key] = JSON.parse(value);
+								}
+							});
+						}
 						js.insert(_data[item]);
 					}
 					js.end();
@@ -1100,7 +1089,7 @@ var test = new app()
 	}
 });
 
-// USE THIS AS THE MASTER CODEBASE.. BUT THIS NEEDS TO BE REFACTORED!!!
+// TODO: USE THIS AS THE MASTER CODEBASE.. BUT THIS NEEDS TO BE REFACTORED AND CONVERTED INTO MODULES !!!
 
 //TODO:
 // determine the output type.
@@ -1109,18 +1098,6 @@ var test = new app()
 //movies/<movies>/actors/<actors>
 //need use case for Querystring & Hash
 http.Server(app.run(test)).listen(test.port);
-
-
-
-
-// server.on('connection', function(socket){
-// 	console.log('connection', socket);
-// });
-
-
-//Mustache.render(views.cache[0], context)
-			
-
 
 
 

@@ -5,7 +5,7 @@
 local SYS_ID = nil
 local status = nil
 local args = {KEYS[1],KEYS[2],KEYS[3],KEYS[4],KEYS[5]}
---local args = {'projects','adrian-test','Test Project','Adrian Com','adrian-test-lg.png'} -- Debug
+--local args = {'projects','hash-test','{\"nadme\":\"Adrian\"}','Adrian Com','adrian-test-lg.png'} -- Debug
 local collection = args[1] -- This field represents the Table or Key name (ex. projects)
 local ID = args[2]  -- ID field to represent the data record. Should be non-numeric. This will match the path name (ex. adrian-test)
 local tableName = 'summary' -- Default key which represents short details

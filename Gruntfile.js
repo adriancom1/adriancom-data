@@ -44,6 +44,7 @@ module.exports = function(grunt) {
 		emitter.on('ready', function(data) {
 			data.forEach(function(item) {
 				var fieldLen = 1; //Set to 1 to account for the 'collection' name (dataset)
+				var fieldNames = ' "collection"'; //dataset field name (ex. projects)
 				var fieldValues =  ' "' + dataset + '"';
 				var fields = Object.keys(item); //summary, details
 				
@@ -51,13 +52,23 @@ module.exports = function(grunt) {
 					//Get the SHA key id from the config data
 					sha = self.data[fields[i]];
 					var collection = item[fields[i]];
+
 					for(var field in collection) {
-						fieldValues += ' "' + collection[field] + '"';
+						fieldNames += ' "' + field + '"';
+						var _cField = collection[field];
+						//Encode a Value of type Object into an JSON encoded LUA string 
+						if(typeof _cField == 'object' || Array.isArray(_cField)) {
+							_cField = JSON.stringify(_cField);
+							_cField = _cField.replace(/\"/g, '\\"'); //Encoding hack
+						}
+						fieldValues += ' "' + _cField + '"';
 						fieldLen++;
 					}
 				//Commit data to the Redis datastore
-				run('./'+ cli.bin + ' evalsha '+ sha + ' ' + fieldLen + fieldValues,
-				"An internal error occured. Data was not received.", collection.id + ' ' + fields[i] + " added.", './'+ cli.bin +' get id:' + dataset);
+				var command = './'+ cli.bin + ' evalsha '+ sha + ' ' + fieldLen + fieldNames + ' ' + fieldValues;
+				console.log('\n\n\nWTF===', command);
+				// run('./'+ cli.bin + ' evalsha '+ sha + ' ' + fieldLen + fieldValues,
+				// "An internal error occured. Data was not received.", collection.id + ' ' + fields[i] + " added.", './'+ cli.bin +' get id:' + dataset);
 				//Reset the counter and fields for the next recordset
 				fieldLen = 1;
 				fieldValues =  ' "' + dataset + '"';

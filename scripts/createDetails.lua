@@ -49,7 +49,6 @@ rec:setValues()
 
 local status = rec:getStatus()
 
--- Good if status exit code is 0
 if status ~= nil then
 	return rec:out()
 else

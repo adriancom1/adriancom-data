@@ -4,18 +4,17 @@
 
 local SYS_ID = nil
 local status = nil
-local args = {KEYS[1],KEYS[2],KEYS[3],KEYS[4],KEYS[5]}
---local args = {'projects','hash-test','{\"nadme\":\"Adrian\"}','Adrian Com','adrian-test-lg.png'} -- Debug
-local collection = args[1] -- This field represents the Table or Key name (ex. projects)
-local ID = args[2]  -- ID field to represent the data record. Should be non-numeric. This will match the path name (ex. adrian-test)
+
+local collection = ARGV[1] -- This field represents the Table or Key name (ex. projects)
+local ID = ARGV[2]  -- ID field to represent the data record. Should be non-numeric. This will match the path name (ex. adrian-test)
 local tableName = 'summary' -- Default key which represents short details
 
 local createRecord = function()
 	status = redis.call('hmset', collection ..':'..tostring(SYS_ID)..':'..tableName, 
-	'id', 			ID, 		-- Numeric ID 
-	'name', 		args[3],	-- Name or Title
-	'company', 		args[4],	-- Project Owner
-	'image',		args[5]		-- Project Thumbnail
+	KEYS[2], 			ID, 	-- RecordId 
+	KEYS[3], 		ARGV[3],	-- Name or Title
+	KEYS[4], 		ARGV[4],	-- Project Owner
+	KEYS[5],		ARGV[5]		-- Project Thumbnail
 	)
 end
  

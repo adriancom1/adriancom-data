@@ -65,7 +65,7 @@ module.exports = function(grunt) {
 						fieldLen++;
 					}
 				//Commit data to the Redis datastore
-				var command = './'+ cli.bin + ' evalsha '+ sha + ' ' + fieldLen + fieldNames + ' ' + fieldValues;
+				var command = './'+ cli.bin + ' evalsha '+ sha + ' ' + fieldLen + fieldNames + fieldValues;
 				run(command, "An internal error occured. Data was not received.", collection.id + ' ' + fields[i] + " added.", './'+ cli.bin +' get id:' + dataset);
 				
 				//Reset the counter and fields for the next recordset

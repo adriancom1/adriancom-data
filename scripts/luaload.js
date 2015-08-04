@@ -1,11 +1,10 @@
 // This will compile a LUA Script into a cached Redis script
 // An SHA value representing the compiled script will be returned
 
-require('shelljs/global');
+//require('shelljs/global');
 var fs = require('fs');
 var redis = require('redis');
 var config = require('config');
-var color = require('bash-color');
 var client = null;
 
 
@@ -44,9 +43,9 @@ fs.readFile(arg, function (err, data) {
 
 //Success Message
 function ok(msg) {
-	echo(color.green('==========================================================', true));
-	echo(color.yellow('\n[SHA] ==> ' + msg, true));
-	echo(color.green('==========================================================', true));
+	console.log('==========================================================');
+	console.log('\n[SHA] ==> ' + msg );
+	console.log('==========================================================');
 };
 
 

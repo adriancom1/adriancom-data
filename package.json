@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node adriancom.js",
-    "dev": "export PORT=3000 && export NODE_ENV=dev && nodemon adriancom.js localhost 8080",
+    "server": "export PORT=3000 && export NODE_ENV=dev && nodemon adriancom.js localhost 8080",
     "install": "node scripts/luaload.js getProjectList.lua",
     "preinstall": "node scripts/luaload.js createDetails.lua",
     "postinstall": "node scripts/luaload.js createRecord.lua && node scripts/luaload.js deleteRecord.lua",

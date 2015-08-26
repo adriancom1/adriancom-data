@@ -14,7 +14,8 @@ local createRecord = function()
 	KEYS[2], 			ID, 	-- RecordId 
 	KEYS[3], 		ARGV[3],	-- Name or Title
 	KEYS[4], 		ARGV[4],	-- Project Owner
-	KEYS[5],		ARGV[5]		-- Project Thumbnail
+	KEYS[5],		ARGV[5],		-- Project Thumbnail
+	KEYS[6],		ARGV[6]		-- OrderBy Value
 	)
 end
  

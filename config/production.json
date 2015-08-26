@@ -1,7 +1,0 @@
-{
-  "Redis": {
-    "dbConfig": {
-    	"name": "prod"
-    }
-  }
-}

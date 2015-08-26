@@ -24,6 +24,9 @@ module.exports = function(grunt) {
 
 	// Define Multi Tasks
 	grunt.registerMultiTask('load', 'Load data into the Redis datastore. ', function(dataset) {
+		var envConfig = require('config'); //NODE_ENV Config environment variable
+		var redisConf = envConfig.get('Redis.dbConfig');
+
 		var self = this;
 		//Default workspace is projects
 		if(dataset == null) throw new Error('dataset or Key name parameter is missing. Use: grunt:load:[script]:[dataset], (ex. grunt load:data:projects)');
@@ -65,8 +68,8 @@ module.exports = function(grunt) {
 						fieldLen++;
 					}
 				//Commit data to the Redis datastore
-				var command = './'+ cli.bin + ' evalsha '+ sha + ' ' + fieldLen + fieldNames + fieldValues;
-				run(command, "An internal error occured. Data was not received.", collection.id + ' ' + fields[i] + " added.", './'+ cli.bin +' get id:' + dataset);
+				var command = './'+ cli.bin + ' -h ' + redisConf.host + ' -p ' + redisConf.port  + ' -a ' + redisConf.pwd + ' evalsha '+ sha + ' ' + fieldLen + fieldNames + fieldValues;
+				run(command, "An internal error occured. Data was not received.", collection.id + ' ' + fields[i] + " added.", './'+ cli.bin + ' -h ' + redisConf.host + ' -p ' + redisConf.port + ' -a ' + redisConf.pwd  + ' get id:' + dataset);
 				
 				//Reset the counter and fields for the next recordset
 				fieldLen = 1;

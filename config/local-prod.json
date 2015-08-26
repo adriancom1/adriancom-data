@@ -1,7 +1,9 @@
 {
   "Redis": {
     "dbConfig": {
-    	"name": "local-prod"
+    	"name": "local-prod",
+    	"port": "11959",
+    	"host": "redis://h:pc3ujvb8ko7kdq49fpda8l89g35@ec2-107-21-120-49.compute-1.amazonaws.com:11959"
     }
   }
 }
